@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>Listzz add mail</title>
+    </head>
+
+    <body>
+        <div id="holder"></div>
+        <script src="http://yandex.st/raphael/2.0.1/raphael.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js" type="text/javascript" charset="utf-8"></script>
+
+        <script type="text/javascript" charset="utf-8">
+            window.onload = function () {
+                var r = Raphael("holder", 50, 420),
+                    discattr = {fill: "#fff", stroke: "none"};
+
+                function curvePath(x, y, ax, ay, bx, by, zx, zy) {
+                    return [["M", x, y], ["C", ax, ay, bx, by, zx, zy]];
+                }
+
+                function curve(x, y, ax, ay, bx, by, zx, zy, color) {
+                    var path = curvePath(x, y, ax, ay, bx, by, zx, zy),
+                        curve = r.path(path).attr({stroke: color || Raphael.getColor(), "stroke-width": 4, "stroke-linecap": "round"});
+
+                        return curve;
+                }
+
+                function animatedCurve(ix, iy, x, y, ax, ay, bx, by, zx, zy, color, cb) {
+                    var c = curve(ix, iy, ix, iy, ix, iy, ix, iy, color);
+
+                    c.animate({
+                        path: curvePath(x, y, ax, ay, bx, by, zx, zy)
+                    }, 500, 'ease-out', cb);
+
+                    return c;
+                }
+
+                function animateText(x, y, w, h, cb) {
+                    var textBox = $('<input type="email" name="" value=""/>');
+                    textBox.css({ left: x, top:y, height: h, width: 5, position: 'absolute'});
+                    $('#holder').append(textBox);
+                    return textBox.animate({width: w}, 500);
+                }
+
+                var c1 = animatedCurve(0, 0, 0, 0, 30, 0, 0, 50, 50, 50, "rgb(0, 100, 0)", function() {
+                    $.when(animateText(60, 40, 200, 30).delay(500)).done(function() {
+                        animatedCurve(20, 35, 20, 35, 28, 35, 18, 100, 50, 100, "rgb(0, 100, 0)", function() {
+                            animateText(60, 90, 200, 30);
+                        });
+                    });
+                });
+
+                console.log(c1);
+                //curve(0, 0, 30, 0, 0, 100, 50, 100, "rgb(0, 100, 0)");
+                //curve(0, 0, 30, 0, 0, 150, 50, 150, "rgb(0, 100, 0)");
+            };
+        </script>
+    </body>
+</html>
